@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">othello</string>
+    <string name="facebook_app_id">732515770640826</string>
+    <string name="fb_login_protocol_scheme">fb732515770640826</string>
+</resources>
