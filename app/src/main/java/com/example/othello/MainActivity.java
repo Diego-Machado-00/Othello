@@ -22,8 +22,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import bolts.Task;
@@ -34,10 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference referenciaBase;
     private FirebaseAuth.AuthStateListener ListenerFirebase;
+    private Button botonSalir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         this.callbackManager = CallbackManager.Factory.create();
         this.loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -75,13 +83,21 @@ public class MainActivity extends AppCompatActivity {
                     referenciaBase = FirebaseDatabase.getInstance().getReference();
                     referenciaBase.child("Usuarios").child(user.getUid()).setValue(usuario);
                     UsuarioRegistrado();
-                }else{
-                    Toast.makeText(getApplicationContext(), "Autenticacion Fallida", Toast.LENGTH_SHORT).show();
                 }
             }
         };
-    }
 
+        this.botonSalir = findViewById(R.id.botonsalir);
+        this.botonSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrar();
+            }
+        });
+    }
+    public void cerrar(){
+        this.finish();
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

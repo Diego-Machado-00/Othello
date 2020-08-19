@@ -11,11 +11,11 @@
         android:id="@+id/imageView"
         android:layout_width="220dp"
         android:layout_height="238dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="176dp"
-        android:layout_marginEnd="84dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintHorizontal_bias="0.48"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/nombrejuego" />
@@ -25,13 +25,29 @@
         android:layout_width="225dp"
         android:layout_height="70dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginStart="93dp"
-        android:layout_marginEnd="93dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.279" />
+        app:layout_constraintVertical_bias="0.191" />
+
+    <Button
+        android:id="@+id/botonsalir"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_width="214dp"
+        android:layout_height="23dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="32dp"
+        android:background="@drawable/bordes_redondos"
+        android:text="Salir"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
