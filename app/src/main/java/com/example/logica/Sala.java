@@ -3,13 +3,19 @@ package com.example.logica;
 public class Sala {
     public String jugador1;
     public String jugador2;
-
+    public int turno;
+    public int poscicionX;
+    public int posciciony;
     public Sala() {
     }
 
-    public Sala(String jugador1, String jugador2) {
+    public Sala(String jugador1, String jugador2, int turno, int poscicionX, int posciciony) {
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
+        this.turno = turno;
+        this.poscicionX = poscicionX;
+        this.posciciony = posciciony;
+
     }
 
     public String getJugador1() {
@@ -27,4 +33,30 @@ public class Sala {
     public void setJugador2(String jugador2) {
         this.jugador2 = jugador2;
     }
+
+    public int getTurno() {
+        return turno;
+    }
+
+    public void setTurno(int turno) {
+        this.turno = turno;
+    }
+
+    public int getPoscicionX() {
+        return poscicionX;
+    }
+
+    public void setPoscicionX(int poscicionX) {
+        this.poscicionX = poscicionX;
+    }
+
+    public int getPosciciony() {
+        return posciciony;
+    }
+
+    public void setPosciciony(int posciciony) {
+        this.posciciony = posciciony;
+    }
+
+
 }

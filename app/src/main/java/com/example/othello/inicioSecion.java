@@ -3,30 +3,23 @@ package com.example.othello;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.logica.Sala;
-import com.example.logica.Usuario;
-import com.facebook.login.widget.ProfilePictureView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -98,7 +91,7 @@ public class inicioSecion extends AppCompatActivity {
                         }
 
                     }
-                    if(nuevo=true){
+                    if(nuevo==true){
                         CrearSala();
                     }
 
@@ -123,7 +116,7 @@ public class inicioSecion extends AppCompatActivity {
     }
     public void CrearSala(){
         referenciaBase.child("Usuarios").child(this.usuario.getUid()).child("estado").setValue("3");
-        Sala sala = new Sala(this.usuario.getEmail(), "");
+        Sala sala = new Sala(this.usuario.getPhotoUrl().toString(), "",1,0,0);
         referenciaBase.child("Salas").child(this.usuario.getUid()).setValue(sala);
         ValueEventListener postListener = new ValueEventListener() {
             @Override
@@ -131,7 +124,8 @@ public class inicioSecion extends AppCompatActivity {
                 // Get Post object and use the values to update the UI
                 Sala sala = dataSnapshot.getValue(Sala.class);
                 if(!sala.getJugador2().equalsIgnoreCase("")){
-                    Crearjuego();
+                    referenciaBase.child("Salas").child(dataSnapshot.getKey()).removeEventListener(this);
+                    Crearjuego(dataSnapshot.getKey());
                 }
 
             }
@@ -143,14 +137,15 @@ public class inicioSecion extends AppCompatActivity {
         };
         referenciaBase.child("Salas").child(this.usuario.getUid()).addValueEventListener(postListener);
     }
-    public void Crearjuego(){
-        Intent intent = new Intent(this, game.class);
+    public void Crearjuego(String sala){
+        Intent intent = new Intent(this, Game.class);
         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("salaActual", sala);
         startActivity(intent);
     }
     public void EntrarSala(String llave){
-        referenciaBase.child("Salas").child(llave).child("jugador2").setValue(this.usuario.getEmail());
-        Crearjuego();
+        referenciaBase.child("Salas").child(llave).child("jugador2").setValue(this.usuario.getPhotoUrl().toString());
+        Crearjuego(llave);
     }
 
 }
