@@ -43,5 +43,20 @@ public class PintarPuntaje implements Observer {
         }catch (Exception e){
             System.out.println("Observador no notificado");
         }
+        try{
+            ArrayList<Integer> elementos = (ArrayList<Integer>) arg;
+            this.puntajeJActual.setText(Integer.toString(elementos.get(0)));
+            this.puntajeJContrincante.setText(Integer.toString(elementos.get(1)));
+            if(elementos.get(2)==elementos.get(3)){
+                this.turno.setText("Tu Turno");
+                this.turno.setTextColor(elementos.get(4));
+            }else{
+                this.turno.setText("Turno Del Oponente");
+                this.turno.setTextColor(elementos.get(4));
+            }
+
+        }catch (Exception e){
+            System.out.println("Observador no notificado");
+        }
     }
 }

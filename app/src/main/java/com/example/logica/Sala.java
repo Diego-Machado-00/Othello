@@ -6,16 +6,17 @@ public class Sala {
     public int turno;
     public int poscicionX;
     public int posciciony;
+    public int gameOver;
     public Sala() {
     }
 
-    public Sala(String jugador1, String jugador2, int turno, int poscicionX, int posciciony) {
+    public Sala(String jugador1, String jugador2, int turno, int poscicionX, int posciciony, int gameOver) {
         this.jugador1 = jugador1;
         this.jugador2 = jugador2;
         this.turno = turno;
         this.poscicionX = poscicionX;
         this.posciciony = posciciony;
-
+        this.gameOver = gameOver;
     }
 
     public String getJugador1() {

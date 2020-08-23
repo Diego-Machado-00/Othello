@@ -116,7 +116,7 @@ public class inicioSecion extends AppCompatActivity {
     }
     public void CrearSala(){
         referenciaBase.child("Usuarios").child(this.usuario.getUid()).child("estado").setValue("3");
-        Sala sala = new Sala(this.usuario.getPhotoUrl().toString(), "",1,0,0);
+        Sala sala = new Sala(this.usuario.getPhotoUrl().toString(), "",1,0,0,0);
         referenciaBase.child("Salas").child(this.usuario.getUid()).setValue(sala);
         ValueEventListener postListener = new ValueEventListener() {
             @Override

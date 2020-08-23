@@ -29,6 +29,8 @@ public class Tablero extends Observable {
     private int miTurno;
     private  int inicio;
     private Sala sala;
+    private int puntajeA;
+    private int miPuntaje;
     public Tablero(String llaveSala) {
         this.llaveSala = llaveSala;
         this.tablero = new int[FILAS][COLUMNAS];
@@ -49,7 +51,13 @@ public class Tablero extends Observable {
     public void menu(Sala sala){
         this.sala = sala;
         if(inicio==1){
-           pintarJugada(sala.getPoscicionX(),sala.getPosciciony(),sala.getTurno());
+            if(sala.getPoscicionX()>=0 && sala.getPosciciony()>=0){
+                pintarJugada(sala.getPoscicionX(),sala.getPosciciony(),sala.getTurno());
+            }
+            this.turnoActual=sala.getTurno();
+            if(miTurno==turnoActual){
+                validarPosibles();
+            }
         }else{
             ObtenerFotos(sala.getJugador1(), sala.getJugador2(), sala.getTurno());
             this.inicio=1;
@@ -79,6 +87,38 @@ public class Tablero extends Observable {
 
     }
 
+    public void validarGameOVer(int turnosala){
+        int perder1 =0;
+        int perder2 =0;
+        for(int i=0; i<FILAS; i++){
+            for(int j=0; j<COLUMNAS; j++){
+                if(validarFicha(i,j,1)){
+                    perder1++;
+                }
+                if(validarFicha(i,j,2)){
+                    perder2++;
+                }
+            }
+        }
+        if(perder1 ==0 && perder2!=0){
+            if(turnosala==1){
+                turnoActual=1;
+                jugar(-1,-1);
+            }
+        }else{
+            if(perder1 !=0 && perder2==0){
+                if(turnosala==2){
+                    turnoActual=2;
+                    jugar(-1,-1);
+                }
+            }else{
+                if(perder1 ==0 && perder2==0){
+                    System.out.println("Game over");
+                }
+            }
+        }
+    }
+
     public void pintarJugada(int i, int j, int turno){
             eliminarPosibles();
             ArrayList<int []> elementos = new ArrayList<>();
@@ -93,12 +133,37 @@ public class Tablero extends Observable {
             elementos.add(poscisiones);
             this.setChanged();
             this.notifyObservers(elementos);
-            pintarFichas(i,j);
-            this.turnoActual=turno;
-            if(miTurno==turnoActual){
-                validarPosibles();
-            }
+            pintarFichas(i,j, turnoActual);
+            calcularPuntaje();
+            validarGameOVer(turno);
+    }
 
+    private void calcularPuntaje() {
+        ArrayList<Integer> elementos = new ArrayList<>();
+        this.puntajeA =0;
+        this.miPuntaje =0;
+        for(int i=0; i<FILAS; i++){
+            for (int j=0; j<COLUMNAS; j++){
+                if(this.tablero[i][j]==miTurno){
+                    this.miPuntaje ++;
+                }else{
+                    if(this.tablero[i][j]!=0 && this.tablero[i][j]!=3){
+                        this.puntajeA++;
+                    }
+                }
+            }
+        }
+        elementos.add(this.miPuntaje);
+        elementos.add(this.puntajeA);
+        elementos.add(turnoActual);
+        elementos.add(miTurno);
+        if(turnoActual==1){
+            elementos.add(Color.WHITE);
+        }else{
+            elementos.add(Color.BLACK);
+        }
+        this.setChanged();
+        this.notifyObservers(elementos);
     }
 
     private void eliminarPosibles() {
@@ -121,7 +186,7 @@ public class Tablero extends Observable {
 
     public void hacerMovimiento(int i, int j, int movimientoI, int movimientoJ){
         ArrayList<int []> elementos = new ArrayList<>();
-        while (tablero[i][j] != turnoActual && tablero[i][j]!=0) {
+        while (tablero[i][j] != turnoActual && tablero[i][j]!=0 && tablero[i][j]!=3) {
             tablero[i][j] = turnoActual;
             int poscisiones[]= new int[3];
             poscisiones[0]=i;
@@ -138,39 +203,39 @@ public class Tablero extends Observable {
         this.setChanged();
         this.notifyObservers(elementos);
     }
-    private void pintarFichas(int i, int j) {
+    private void pintarFichas(int i, int j, int ActualTurno) {
         //colocar la ficha en el tablero
         tablero[i][j] = turnoActual;
         //validarIzquierda
-        if(validarPosicionPosible(i,j-1,0,-1)){
+        if(validarPosicionPosible(i,j-1,0,-1, ActualTurno)){
             hacerMovimiento(i,j-1,0,-1);
         }
         //validarDerecha
-        if(validarPosicionPosible(i,j+1,0,1)){
+        if(validarPosicionPosible(i,j+1,0,1, ActualTurno)){
             hacerMovimiento(i,j+1,0,1);;
         }
         //validarAbajo
-        if(validarPosicionPosible(i+1,j,1,0)){
+        if(validarPosicionPosible(i+1,j,1,0, ActualTurno)){
             hacerMovimiento(i+1,j,1,0);
         }
         //validarArriba
-        if(validarPosicionPosible(i-1,j,-1,0)){
+        if(validarPosicionPosible(i-1,j,-1,0, ActualTurno)){
              hacerMovimiento(i-1,j,-1,0);
         }
         //validarAbajo-Derecha
-        if(validarPosicionPosible(i+1,j+1,1,1)){
+        if(validarPosicionPosible(i+1,j+1,1,1, ActualTurno)){
             hacerMovimiento(i+1,j+1,1,1);
         }
         //validarAbajo-Izquierda
-        if(validarPosicionPosible(i+1,j-1,1,-1)){
+        if(validarPosicionPosible(i+1,j-1,1,-1, ActualTurno)){
             hacerMovimiento(i+1,j-1,1,-1);
         }
         //validarArriba-Derecha
-        if(validarPosicionPosible(i-1,j+1,-1,1)){
+        if(validarPosicionPosible(i-1,j+1,-1,1, ActualTurno)){
             hacerMovimiento(i-1,j+1,-1,1);
         }
         //validarArriba-Izquierda
-        if(validarPosicionPosible(i-1,j-1,-1,-1)){
+        if(validarPosicionPosible(i-1,j-1,-1,-1, ActualTurno)){
             hacerMovimiento(i-1,j-1,-1,-1);
         }
 
@@ -180,7 +245,7 @@ public class Tablero extends Observable {
         ArrayList<int []> movimientosPosibles = new ArrayList<>();
         for(int i=0; i<FILAS; i++){
             for(int j=0; j<COLUMNAS; j++){
-                if(validarFicha(i,j)){
+                if(validarFicha(i,j, turnoActual)){
                     tablero[i][j]=3;
                     int poscision []= new int[3];
                     poscision[0]=i;
@@ -194,48 +259,48 @@ public class Tablero extends Observable {
         this.notifyObservers(movimientosPosibles);
     }
 
-    private boolean validarFicha(int i, int j) {
+    private boolean validarFicha(int i, int j, int ActualTurno ) {
         if(tablero[i][j]!=0){
             return false;
         }
         //validarIzquierda
-        if(validarPosicionPosible(i,j-1,0,-1)){
+        if(validarPosicionPosible(i,j-1,0,-1,ActualTurno)){
             return true;
         }
         //validarDerecha
-        if(validarPosicionPosible(i,j+1,0,1)){
+        if(validarPosicionPosible(i,j+1,0,1,ActualTurno)){
             return true;
         }
         //validarAbajo
-        if(validarPosicionPosible(i+1,j,1,0)){
+        if(validarPosicionPosible(i+1,j,1,0,ActualTurno)){
             return true;
         }
         //validarArriba
-        if(validarPosicionPosible(i-1,j,-1,0)){
+        if(validarPosicionPosible(i-1,j,-1,0,ActualTurno)){
             return true;
         }
         //validarAbajo-Derecha
-        if(validarPosicionPosible(i+1,j+1,1,1)){
+        if(validarPosicionPosible(i+1,j+1,1,1,ActualTurno)){
             return true;
         }
         //validarAbajo-Izquierda
-        if(validarPosicionPosible(i+1,j-1,1,-1)){
+        if(validarPosicionPosible(i+1,j-1,1,-1,ActualTurno)){
             return true;
         }
         //validarArriba-Derecha
-        if(validarPosicionPosible(i-1,j+1,-1,1)){
+        if(validarPosicionPosible(i-1,j+1,-1,1,ActualTurno)){
             return true;
         }
         //validarArriba-Izquierda
-        if(validarPosicionPosible(i-1,j-1,-1,-1)){
+        if(validarPosicionPosible(i-1,j-1,-1,-1,ActualTurno)){
             return true;
         }
         return false;
     }
 
-    private boolean validarPosicionPosible(int i, int j, int poscisionNuevai , int poscisionNuevaj) {
+    private boolean validarPosicionPosible(int i, int j, int poscisionNuevai , int poscisionNuevaj, int ActualTurno) {
         if((i >= 0) && (i< FILAS) && (j>= 0) && (j< COLUMNAS)){
-            if(tablero[i][j]!=miTurno && tablero[i][j]!=0 && tablero[i][j]!=3){
+            if(tablero[i][j]!=ActualTurno && tablero[i][j]!=0 && tablero[i][j]!=3){
                 while ((i >= 0) && (i< FILAS) && (j>= 0) && (j< COLUMNAS)) {
                     i += poscisionNuevai;
                     j += poscisionNuevaj;
@@ -243,7 +308,7 @@ public class Tablero extends Observable {
                         if (tablero[i][j] == 0) {
                             return false; //no es consecutiva
                         }
-                        if (tablero[i][j] == miTurno){
+                        if (tablero[i][j] == ActualTurno){
                             return true;// posible ficha que se puede voltear
                         }
                     }
