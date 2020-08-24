@@ -339,7 +339,11 @@ public class Tablero extends Observable {
                     i += poscisionNuevai;
                     j += poscisionNuevaj;
                     if((i >= 0) && (i< FILAS) && (j>= 0) && (j< COLUMNAS)){
+<<<<<<< Updated upstream
                         if (tablero[i][j] == 0 || tablero[i][j]==3) {
+=======
+                        if (tablero[i][j] == 0 || tablero[i][j] == 3) {
+>>>>>>> Stashed changes
                             return false; //no es consecutiva
                         }
                         if (tablero[i][j] == ActualTurno){
