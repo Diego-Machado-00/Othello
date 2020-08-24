@@ -51,13 +51,18 @@ public class Tablero extends Observable {
     public void menu(Sala sala){
         this.sala = sala;
         if(inicio==1){
-            if(sala.getPoscicionX()>=0 && sala.getPosciciony()>=0){
-                pintarJugada(sala.getPoscicionX(),sala.getPosciciony(),sala.getTurno());
+            if(sala.getGameOver()==0){
+                if(sala.getPoscicionX()>=0 && sala.getPosciciony()>=0){
+                    pintarJugada(sala.getPoscicionX(),sala.getPosciciony(),sala.getTurno());
+                }
+                this.turnoActual=sala.getTurno();
+                if(miTurno==turnoActual){
+                    validarPosibles();
+                }
+            }else{
+                validarGanar();
             }
-            this.turnoActual=sala.getTurno();
-            if(miTurno==turnoActual){
-                validarPosibles();
-            }
+
         }else{
             ObtenerFotos(sala.getJugador1(), sala.getJugador2(), sala.getTurno());
             this.inicio=1;
@@ -113,7 +118,7 @@ public class Tablero extends Observable {
                 }
             }else{
                 if(perder1 ==0 && perder2==0){
-                    System.out.println("Game over");
+                    referenciaBase.child("Salas").child(llaveSala).child("gameOver").setValue(1);
                 }
             }
         }
@@ -134,10 +139,36 @@ public class Tablero extends Observable {
             this.setChanged();
             this.notifyObservers(elementos);
             pintarFichas(i,j, turnoActual);
-            calcularPuntaje();
             validarGameOVer(turno);
+            calcularPuntaje();
     }
-
+    private void validarGanar(){
+        this.puntajeA =0;
+        this.miPuntaje =0;
+        int gana = 0;
+        for(int i=0; i<FILAS; i++){
+            for (int j=0; j<COLUMNAS; j++){
+                if(this.tablero[i][j]==miTurno){
+                    this.miPuntaje ++;
+                }else{
+                    if(this.tablero[i][j]!=0 && this.tablero[i][j]!=3){
+                        this.puntajeA++;
+                    }
+                }
+            }
+        }
+        if(puntajeA==miPuntaje){
+            gana=3;
+        }else{
+            if(puntajeA<miPuntaje){
+                gana=1;
+            }else{
+                gana=2;
+            }
+        }
+        this.setChanged();
+        this.notifyObservers(gana);
+    }
     private void calcularPuntaje() {
         ArrayList<Integer> elementos = new ArrayList<>();
         this.puntajeA =0;
@@ -158,9 +189,9 @@ public class Tablero extends Observable {
         elementos.add(turnoActual);
         elementos.add(miTurno);
         if(turnoActual==1){
-            elementos.add(Color.WHITE);
-        }else{
             elementos.add(Color.BLACK);
+        }else{
+            elementos.add(Color.WHITE);
         }
         this.setChanged();
         this.notifyObservers(elementos);
@@ -321,18 +352,19 @@ public class Tablero extends Observable {
     public void ObtenerFotos(String foto1, String foto2, int turno){
         this.turnoActual = turno;
         ArrayList<String> fotos = new ArrayList<>();
-        if(usuario.getPhotoUrl().toString().equals(foto1)){
-            fotos.add(foto1);
+        if(usuario.getPhotoUrl().toString().equals(foto2)){
             fotos.add(foto2);
+            fotos.add(foto1);
             fotos.add("Tu Turno");
-            fotos.add(Integer.toString(Color.WHITE));
-            this.miTurno = 1;
-        }else{
-            fotos.add(foto2);
-            fotos.add(foto1);
-            fotos.add("Turno Del Oponente");
             fotos.add(Integer.toString(Color.BLACK));
             this.miTurno = 2;
+
+        }else{
+            fotos.add(foto1);
+            fotos.add(foto2);
+            fotos.add("Turno Del Oponente");
+            fotos.add(Integer.toString(Color.WHITE));
+            this.miTurno = 1;
         }
         this.setChanged();
         this.notifyObservers(fotos);

@@ -19,6 +19,14 @@ public class Sala {
         this.gameOver = gameOver;
     }
 
+    public int getGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(int gameOver) {
+        this.gameOver = gameOver;
+    }
+
     public String getJugador1() {
         return jugador1;
     }
