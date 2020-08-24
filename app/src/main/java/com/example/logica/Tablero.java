@@ -31,6 +31,7 @@ public class Tablero extends Observable {
     private Sala sala;
     private int puntajeA;
     private int miPuntaje;
+    private ValueEventListener listenerjuego;
     public Tablero(String llaveSala) {
         this.llaveSala = llaveSala;
         this.tablero = new int[FILAS][COLUMNAS];
@@ -75,7 +76,7 @@ public class Tablero extends Observable {
         this.tablero[3][4]=2;
         this.tablero[4][3]=2;
         this.tablero[4][4]=1;
-        ValueEventListener listenerjuego = new ValueEventListener() {
+         listenerjuego = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // Get Post object and use the values to update the UI
@@ -91,7 +92,9 @@ public class Tablero extends Observable {
         referenciaBase.child("Salas").child(llaveSala).addValueEventListener(listenerjuego);
 
     }
-
+    public void eliminarListener(){
+        referenciaBase.child("Salas").child(llaveSala).removeEventListener(listenerjuego);
+    }
     public void validarGameOVer(int turnosala){
         int perder1 =0;
         int perder2 =0;

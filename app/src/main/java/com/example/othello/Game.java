@@ -44,7 +44,7 @@ public class Game extends AppCompatActivity {
     }
     public void cerrar(){
         referenciaBase = FirebaseDatabase.getInstance().getReference();
-        referenciaBase.child("Salas").child(salaActual).removeValue();
+        this.tablero.eliminarListener();
         Intent intent = new Intent(this, inicioSecion.class);
         intent.addFlags(intent.FLAG_ACTIVITY_CLEAR_TOP | intent.FLAG_ACTIVITY_CLEAR_TASK | intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);

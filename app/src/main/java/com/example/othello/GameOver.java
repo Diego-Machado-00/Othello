@@ -26,12 +26,12 @@ public class GameOver implements Observer {
         layout.setOrientation(LinearLayout.VERTICAL);
         ImageView imagen = new ImageView(this.game);
         if(gana==1){
-            imagen.setImageResource(R.drawable.gameover);
+            imagen.setImageResource(R.drawable.win);
         }else{
             if(gana==2){
-                imagen.setImageResource(R.drawable.gameover);
+                imagen.setImageResource(R.drawable.lose);
             }else{
-                imagen.setImageResource(R.drawable.gameover);
+                imagen.setImageResource(R.drawable.draw);
             }
         }
         LinearLayout.LayoutParams margen = new LinearLayout.LayoutParams(750, 180);
