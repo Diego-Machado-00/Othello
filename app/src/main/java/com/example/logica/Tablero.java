@@ -294,7 +294,7 @@ public class Tablero extends Observable {
     }
 
     private boolean validarFicha(int i, int j, int ActualTurno ) {
-        if(tablero[i][j]!=0){
+        if(tablero[i][j]!=0 && tablero[i][j]!=3){
             return false;
         }
         //validarIzquierda
@@ -339,7 +339,7 @@ public class Tablero extends Observable {
                     i += poscisionNuevai;
                     j += poscisionNuevaj;
                     if((i >= 0) && (i< FILAS) && (j>= 0) && (j< COLUMNAS)){
-                        if (tablero[i][j] == 0) {
+                        if (tablero[i][j] == 0 || tablero[i][j]==3) {
                             return false; //no es consecutiva
                         }
                         if (tablero[i][j] == ActualTurno){
@@ -359,14 +359,14 @@ public class Tablero extends Observable {
             fotos.add(foto2);
             fotos.add(foto1);
             fotos.add("Tu Turno");
-            fotos.add(Integer.toString(Color.BLACK));
+            fotos.add(Integer.toString(Color.WHITE));
             this.miTurno = 2;
 
         }else{
             fotos.add(foto1);
             fotos.add(foto2);
             fotos.add("Turno Del Oponente");
-            fotos.add(Integer.toString(Color.WHITE));
+            fotos.add(Integer.toString(Color.BLACK));
             this.miTurno = 1;
         }
         this.setChanged();
