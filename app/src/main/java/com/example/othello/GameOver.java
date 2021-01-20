@@ -43,7 +43,7 @@ public class GameOver implements Observer {
                 imagen.setImageResource(R.drawable.draw);
             }
         }
-        LinearLayout.LayoutParams margen = new LinearLayout.LayoutParams(0 , 180 );
+        LinearLayout.LayoutParams margen = new LinearLayout.LayoutParams(width-200 , 200 );
         margen.setMargins(0, 0, 0, 30);
         imagen.setLayoutParams(margen);
         layout.addView(imagen);
@@ -59,7 +59,7 @@ public class GameOver implements Observer {
                 cerrar();
             }
         });
-        LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(width-200 , 0);
+        LinearLayout.LayoutParams parametros = new LinearLayout.LayoutParams(width-200 , 75);
         parametros.setMargins(0,0,0,30);
         cerrar.setLayoutParams(parametros);
         // titulo.setTitle("Pausa");
